@@ -1,0 +1,804 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<link rel="icon" type="image/png" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAMAAABEpIrGAAAA2FBMVEUAAADr59sBAQH////u6Nzr59oFBQXr6NkAAAMAAQDt7e3q5tugoKBmZmbz8/OkpKTT09NBQUFLS0tcXFz5+fl9fX3j4+MyMjJQUFBvb2+FhYWZmZnBwcHc3NwfHx+xsbHJyckVFRUqKiq3t7c2NjZhYWHW1tbDw8N1dXV/f38tLS1ERESQkJBra2sRERFXV1fi39fW08uRjodxcWrBvrccGhaYlY+Cf3iqp6CmpJ3Cv7gmIyE+PDW0tK7z8eedmY9RUUktKyTa2MsiHRfMyr9ta2KFhX2VkYY37EK7AAABLElEQVR4nJVSXU/DIBS9l1JKxLllSxZNo85Eo8mccT4sXbI2fdj8/z/JCwgUSmo8D3C5HM79AuB/uH78i1GYlbEpykyv9cj/YLcaCgFwV6ShAV5W7+FsIsxzwYFJR4lFhDNUJisxPGAX7CsbKq4JcZhIWq3UBCnbRHrtCQp6IvjjMyz1diMW3nX+JkLIswZGKmzB5iDapjcRrcLxa0+57EidZvOhtdhniYSzJII2sBpk8duxCjlyxTu9YWfzv42LoIfKrI2M/K4K2R0u5amtmnB1H5VLlkLFOWe+WelQO8S9jRMh/DLEkpLloduvMVMh9oZWOY+bxZsTOOpt69qd/Bi4eGl+ghyqYOLocgNm2BGEGNGGWG0mr5eQez4tSdjpzs7gydedjz3+qtP4ATibDQn+E/58AAAAAElFTkSuQmCC">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Yia Caffé — Café · Cultura · Comunidad</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,700;0,9..144,900;1,9..144,300;1,9..144,700&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+html, body {
+  background-color: #0a0806 !important;
+  color: #ede8d8 !important;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 16px;
+  overflow-x: hidden;
+}
+div, section, header, footer, nav { background-color: transparent; }
+
+[data-es] { display: none; }
+body.es [data-en] { display: none; }
+body.es [data-es] { display: block; }
+span[data-es] { display: none; }
+body.es span[data-en] { display: none; }
+body.es span[data-es] { display: inline; }
+
+/* ── LANG ── */
+.lang-bar {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 200;
+  display: flex; justify-content: flex-end; align-items: center;
+  padding: 14px 28px;
+  background-color: rgba(10,8,6,0.92);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid rgba(210,175,110,.12);
+}
+.lang-toggle { display: flex; gap: 6px; }
+.lang-toggle button {
+  background: transparent; border: 1px solid rgba(210,175,110,.3);
+  color: rgba(237,232,216,.5); font-family: 'DM Sans', sans-serif;
+  font-size: 11px; font-weight: 500; letter-spacing: 3px;
+  padding: 6px 14px; cursor: pointer; transition: .2s; text-transform: uppercase;
+}
+.lang-toggle button.on { background: #b85c2a; border-color: #b85c2a; color: #fff; }
+
+/* ── HERO ── */
+.hero {
+  min-height: 100vh; background-color: #0a0806;
+  display: grid; place-items: center;
+  text-align: center; padding: 120px 24px 80px;
+  position: relative; overflow: hidden;
+}
+.hero-noise {
+  position: absolute; inset: 0; pointer-events: none; z-index: 0;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='0.06'/%3E%3C/svg%3E");
+  opacity: .5;
+}
+.hero-glow {
+  position: absolute; inset: 0; pointer-events: none; z-index: 0;
+  background: radial-gradient(ellipse 70% 50% at 50% 50%, rgba(184,92,42,.2) 0%, transparent 65%);
+}
+.hero-inner { position: relative; z-index: 1; display: flex; flex-direction: column; align-items: center; gap: 0; }
+
+.logo-ring {
+  width: 180px; height: 180px; border-radius: 50%;
+  background: #ede8d8; border: 4px solid rgba(237,232,216,.15);
+  display: flex; align-items: center; justify-content: center;
+  box-shadow: 0 0 80px rgba(184,92,42,.5), 0 0 160px rgba(184,92,42,.15);
+  animation: spin-slow 30s linear infinite, bob 8s ease-in-out infinite;
+  margin-bottom: 36px; flex-shrink: 0;
+}
+.logo-ring img { width: 166px; height: 166px; border-radius: 50%; object-fit: cover; }
+@keyframes bob { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-10px)} }
+@keyframes spin-slow { from{box-shadow: 0 0 80px rgba(184,92,42,.5), 0 0 160px rgba(184,92,42,.15)} to{box-shadow: 0 0 80px rgba(184,92,42,.5), 0 0 160px rgba(184,92,42,.15)} }
+
+.hero-tagline-pre {
+  font-family: 'DM Sans', sans-serif; font-size: 12px; font-weight: 300;
+  letter-spacing: 6px; text-transform: uppercase; color: #b8922a;
+  margin-bottom: 14px;
+}
+.hero-title {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: clamp(72px, 18vw, 180px);
+  letter-spacing: 4px; line-height: .9;
+  color: #ede8d8; margin-bottom: 10px;
+}
+.hero-title span { color: #b85c2a; }
+.hero-location {
+  font-family: 'Fraunces', serif; font-style: italic; font-weight: 300;
+  font-size: clamp(16px, 2.5vw, 22px); color: rgba(237,232,216,.6);
+  letter-spacing: 1px; margin-bottom: 32px;
+}
+.hero-rule { width: 1px; height: 60px; background: linear-gradient(to bottom, #b85c2a, transparent); margin: 0 auto 32px; }
+.hero-sub {
+  font-family: 'Fraunces', serif; font-style: italic; font-weight: 300;
+  font-size: clamp(18px, 2.5vw, 24px); color: rgba(237,232,216,.55);
+  letter-spacing: 1px; margin-bottom: 48px;
+}
+.hero-ctas { display: flex; gap: 12px; flex-wrap: wrap; justify-content: center; }
+
+.btn {
+  font-family: 'DM Sans', sans-serif; font-size: 11px; font-weight: 500;
+  letter-spacing: 3px; text-transform: uppercase; text-decoration: none;
+  cursor: pointer; transition: all .25s; display: inline-block; border: none;
+  padding: 14px 32px;
+}
+.btn-p { background: #b85c2a; color: #fff; }
+.btn-p:hover { background: #d4703a; transform: translateY(-2px); box-shadow: 0 10px 30px rgba(184,92,42,.4); }
+.btn-s { background: transparent; color: #ede8d8; border: 1px solid rgba(237,232,216,.25); }
+.btn-s:hover { border-color: #ede8d8; transform: translateY(-2px); }
+
+/* ── INFO TICKER ── */
+.ticker-wrap {
+  background-color: #b85c2a; overflow: hidden; padding: 14px 0;
+  border-top: 1px solid rgba(237,232,216,.1);
+  border-bottom: 1px solid rgba(237,232,216,.1);
+}
+.ticker {
+  display: flex; gap: 0; width: max-content;
+  animation: ticker 25s linear infinite;
+}
+.ticker-item {
+  font-family: 'Bebas Neue', sans-serif; font-size: 18px;
+  letter-spacing: 3px; color: #fff; padding: 0 40px; white-space: nowrap;
+}
+.ticker-dot { color: rgba(255,255,255,.4); }
+@keyframes ticker { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+
+/* ── ABOUT ── */
+.about-section { background-color: #0a0806; padding: 120px 0; overflow: hidden; }
+.about-inner { max-width: 1200px; margin: 0 auto; padding: 0 48px; }
+.about-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center; }
+@media(max-width:768px){ .about-grid { grid-template-columns: 1fr; gap: 60px; } }
+
+.about-label {
+  font-family: 'DM Sans', sans-serif; font-size: 10px; font-weight: 500;
+  letter-spacing: 6px; text-transform: uppercase; color: #b8922a;
+  margin-bottom: 20px; display: block;
+}
+.about-heading {
+  font-family: 'Fraunces', serif; font-weight: 900;
+  font-size: clamp(42px, 6vw, 76px); line-height: .95;
+  color: #ede8d8; margin-bottom: 28px;
+}
+.about-heading em { font-style: italic; color: #b85c2a; }
+.about-body {
+  font-family: 'DM Sans', sans-serif; font-weight: 300; font-size: 17px;
+  line-height: 1.9; color: rgba(237,232,216,.85); max-width: 520px;
+}
+.about-owners {
+  margin-top: 36px; padding-top: 24px;
+  border-top: 1px solid rgba(237,232,216,.1);
+  font-family: 'DM Sans', sans-serif; font-size: 11px; font-weight: 500;
+  letter-spacing: 3px; text-transform: uppercase; color: #b8922a;
+}
+
+.about-visual { position: relative; }
+.about-num-block {
+  background: linear-gradient(135deg, #1e1410 0%, #0a0806 100%);
+  border: 1px solid rgba(210,175,110,.15);
+  padding: 60px 40px; text-align: center;
+  position: relative; overflow: hidden;
+}
+.about-num-block::before {
+  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
+  background: linear-gradient(to right, transparent, #b85c2a, transparent);
+}
+.about-num {
+  font-family: 'Bebas Neue', sans-serif; font-size: 120px; line-height: 1;
+  color: #b85c2a; letter-spacing: 2px; display: block;
+}
+.about-num-label {
+  font-family: 'Fraunces', serif; font-style: italic; font-weight: 300;
+  font-size: 20px; color: rgba(237,232,216,.6); display: block; margin-top: 8px;
+}
+.about-tag {
+  display: inline-block; margin-top: 24px;
+  font-family: 'DM Sans', sans-serif; font-size: 10px; font-weight: 500;
+  letter-spacing: 4px; text-transform: uppercase; color: #b8922a;
+  border: 1px solid rgba(184,92,42,.3); padding: 8px 20px;
+}
+
+/* ── MENU ── */
+.menu-section { background-color: #0f0c09; padding: 120px 0; }
+.menu-inner { max-width: 1200px; margin: 0 auto; padding: 0 48px; }
+.menu-header { display: flex; align-items: flex-end; justify-content: space-between; margin-bottom: 60px; flex-wrap: wrap; gap: 20px; }
+.menu-heading {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: clamp(64px, 10vw, 120px); letter-spacing: 3px; line-height: .9;
+  color: #ede8d8;
+}
+.menu-heading span { color: #b85c2a; }
+.menu-dd-link {
+  font-family: 'DM Sans', sans-serif; font-size: 11px; font-weight: 500;
+  letter-spacing: 3px; text-transform: uppercase; color: #b8922a;
+  text-decoration: none; border-bottom: 1px solid rgba(184,146,42,.4);
+  padding-bottom: 2px; transition: .2s; white-space: nowrap;
+}
+.menu-dd-link:hover { color: #ede8d8; border-color: #ede8d8; }
+
+.mgrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 1px;
+  background-color: rgba(210,175,110,.07);
+  border: 1px solid rgba(210,175,110,.07);
+  margin-top: 0;
+}
+.mcard {
+  background-color: #0f0c09; padding: 28px 24px;
+  transition: background .25s; position: relative; overflow: hidden;
+}
+.mcard::after {
+  content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 1px;
+  background: #b85c2a; transform: scaleX(0); transform-origin: left;
+  transition: transform .3s;
+}
+.mcard:hover { background-color: #1a1208; }
+.mcard:hover::after { transform: scaleX(1); }
+.mcat {
+  font-family: 'DM Sans', sans-serif; font-size: 9px; font-weight: 500;
+  letter-spacing: 4px; text-transform: uppercase; color: #b8922a;
+  margin-bottom: 10px;
+}
+.mname {
+  font-family: 'Fraunces', serif; font-weight: 700;
+  font-size: 20px; color: #ede8d8; margin-bottom: 8px; line-height: 1.2;
+}
+.mdesc {
+  font-family: 'DM Sans', sans-serif; font-weight: 300;
+  font-size: 13px; line-height: 1.7; color: rgba(237,232,216,.7);
+}
+.mprice {
+  margin-top: 14px; font-family: 'Bebas Neue', sans-serif;
+  font-size: 22px; letter-spacing: 1px; color: #b8922a;
+}
+.wtag {
+  display: inline-block; background: rgba(42,56,32,.8); color: #8fba78;
+  font-family: 'DM Sans', sans-serif; font-size: 9px; font-weight: 500;
+  letter-spacing: 3px; text-transform: uppercase; padding: 3px 10px; margin-top: 8px;
+}
+.mnote {
+  margin-top: 2px; padding: 20px 28px;
+  background-color: rgba(184,92,42,.08);
+  border-left: 2px solid #b85c2a;
+  font-family: 'DM Sans', sans-serif; font-weight: 300;
+  font-size: 14px; color: rgba(237,232,216,.75); font-style: italic;
+}
+.mnote a { color: #b8922a; text-decoration: none; }
+.mnote a:hover { color: #ede8d8; }
+
+/* ── QUIZ ── */
+.quiz-section { background-color: #0a0806; padding: 120px 0; border-top: 1px solid rgba(210,175,110,.08); }
+.quiz-inner { max-width: 800px; margin: 0 auto; padding: 0 48px; }
+.quiz-heading {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: clamp(52px, 8vw, 100px); letter-spacing: 3px; line-height: .9;
+  color: #ede8d8; margin-bottom: 20px; text-align: center;
+}
+.quiz-heading span { color: #b85c2a; }
+.quiz-sub {
+  font-family: 'Fraunces', serif; font-style: italic; font-weight: 300;
+  font-size: 18px; color: rgba(237,232,216,.55); text-align: center; margin-bottom: 56px;
+}
+.fgrid { display: grid; grid-template-columns: repeat(3,1fr); gap: 1px; background: rgba(210,175,110,.08); }
+@media(max-width:500px){ .fgrid { grid-template-columns: repeat(2,1fr); } }
+.fbtn {
+  background-color: #0a0806; border: none; color: #ede8d8;
+  padding: 28px 16px; cursor: pointer; transition: .2s;
+  display: flex; flex-direction: column; align-items: center; gap: 8px;
+  font-family: 'DM Sans', sans-serif;
+}
+.fbtn .flabel {
+  font-family: 'Fraunces', serif; font-style: italic; font-weight: 700;
+  font-size: 22px; color: #ede8d8; transition: color .2s;
+}
+.fbtn .fsub { font-size: 10px; letter-spacing: 2px; opacity: .5; text-transform: uppercase; }
+.fbtn:hover, .fbtn.on { background-color: #b85c2a; }
+.fbtn.on .flabel { color: #fff; }
+.fbtn:hover .flabel { color: #fff; }
+.fbtn:hover .fsub, .fbtn.on .fsub { opacity: .8; color: #fff; }
+
+.quiz-go { text-align: center; margin-top: 32px; }
+.qresult {
+  margin-top: 32px; padding: 36px;
+  background-color: #0f0c09; border: 1px solid rgba(210,175,110,.2);
+  display: none;
+  position: relative; overflow: hidden;
+}
+.qresult::before {
+  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
+  background: linear-gradient(to right, transparent, #b85c2a, transparent);
+}
+.qresult.show { display: block; animation: fadeUp .5s forwards; }
+@keyframes fadeUp { from{opacity:0;transform:translateY(12px)} to{opacity:1;transform:translateY(0)} }
+.rlabel {
+  font-family: 'DM Sans', sans-serif; font-size: 9px; font-weight: 500;
+  letter-spacing: 5px; text-transform: uppercase; color: #b8922a; margin-bottom: 10px;
+}
+.rdrink {
+  font-family: 'Bebas Neue', sans-serif; font-size: 52px;
+  letter-spacing: 2px; color: #ede8d8; line-height: 1; margin-bottom: 12px;
+}
+.rdesc {
+  font-family: 'Fraunces', serif; font-style: italic; font-weight: 300;
+  font-size: 16px; color: rgba(237,232,216,.7); line-height: 1.8;
+}
+.rbtns { display: flex; gap: 12px; margin-top: 24px; flex-wrap: wrap; }
+
+/* ── COMMUNITY ── */
+.comm-section { background-color: #0f0c09; padding: 120px 0; border-top: 1px solid rgba(210,175,110,.08); }
+.comm-inner { max-width: 1200px; margin: 0 auto; padding: 0 48px; }
+.comm-top { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: end; margin-bottom: 60px; }
+@media(max-width:768px){ .comm-top { grid-template-columns: 1fr; gap: 32px; } }
+.comm-heading {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: clamp(56px, 8vw, 110px); letter-spacing: 3px; line-height: .9;
+  color: #ede8d8;
+}
+.comm-heading span { color: #b85c2a; }
+.comm-body {
+  font-family: 'DM Sans', sans-serif; font-weight: 300;
+  font-size: 17px; line-height: 1.9; color: rgba(237,232,216,.8);
+}
+.comm-body em { font-style: italic; color: rgba(237,232,216,.6); }
+.comm-grid { display: grid; grid-template-columns: repeat(auto-fill,minmax(240px,1fr)); gap: 1px; background: rgba(210,175,110,.07); }
+.ccard { background-color: #0f0c09; padding: 36px 28px; transition: .25s; }
+.ccard:hover { background-color: #1a1208; }
+.cmark { width: 24px; height: 1px; background: #b85c2a; margin-bottom: 22px; }
+.cname {
+  font-family: 'Fraunces', serif; font-weight: 700;
+  font-size: 20px; color: #ede8d8; margin-bottom: 10px; line-height: 1.2;
+}
+.cdesc {
+  font-family: 'DM Sans', sans-serif; font-weight: 300;
+  font-size: 14px; line-height: 1.75; color: rgba(237,232,216,.7);
+}
+
+/* ── EVENTS ── */
+.ev-section { background-color: #0a0806; padding: 120px 0; border-top: 1px solid rgba(210,175,110,.08); }
+.ev-inner { max-width: 780px; margin: 0 auto; padding: 0 48px; }
+.ev-heading {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: clamp(52px, 8vw, 100px); letter-spacing: 3px; line-height: .9;
+  color: #ede8d8; margin-bottom: 24px;
+}
+.ev-heading span { color: #b85c2a; }
+.ev-body {
+  font-family: 'DM Sans', sans-serif; font-weight: 300;
+  font-size: 17px; line-height: 1.9; color: rgba(237,232,216,.8);
+  margin-bottom: 48px;
+}
+.fform { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+@media(max-width:600px){ .fform { grid-template-columns: 1fr; } }
+.full { grid-column: 1/-1; }
+label {
+  display: block; font-family: 'DM Sans', sans-serif; font-size: 9px;
+  font-weight: 500; letter-spacing: 4px; text-transform: uppercase;
+  color: #b8922a; margin-bottom: 8px;
+}
+input, select, textarea {
+  width: 100%; background-color: rgba(255,255,255,.03);
+  border: none; border-bottom: 1px solid rgba(210,175,110,.2);
+  color: #ede8d8; font-family: 'DM Sans', sans-serif;
+  font-weight: 300; font-size: 15px; padding: 12px 4px;
+  outline: none; transition: border-color .2s; appearance: none;
+}
+input:focus, select:focus, textarea:focus { border-color: #b85c2a; }
+input::placeholder { color: rgba(237,232,216,.25); font-style: italic; }
+textarea { resize: vertical; min-height: 110px; border: 1px solid rgba(210,175,110,.15); padding: 14px; }
+textarea:focus { border-color: #b85c2a; }
+select option { background-color: #0a0806; color: #ede8d8; }
+.fnote {
+  margin-top: 14px; font-family: 'Fraunces', serif; font-style: italic;
+  font-weight: 300; font-size: 13px; color: rgba(237,232,216,.4);
+}
+
+/* ── VISIT ── */
+.visit-section { background-color: #0f0c09; padding: 120px 0; border-top: 1px solid rgba(210,175,110,.08); }
+.visit-inner { max-width: 1200px; margin: 0 auto; padding: 0 48px; }
+.visit-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 100px; align-items: start; }
+@media(max-width:768px){ .visit-grid { grid-template-columns: 1fr; gap: 60px; } }
+
+.visit-heading {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: clamp(48px, 6vw, 88px); letter-spacing: 3px; line-height: .9;
+  color: #ede8d8; margin-bottom: 48px;
+}
+.visit-heading span { color: #b85c2a; }
+.vdet { margin-bottom: 30px; }
+.vlabel {
+  font-family: 'DM Sans', sans-serif; font-size: 9px; font-weight: 500;
+  letter-spacing: 4px; text-transform: uppercase; color: #b8922a; margin-bottom: 8px;
+}
+.vval {
+  font-family: 'DM Sans', sans-serif; font-weight: 300;
+  font-size: 16px; color: #ede8d8; line-height: 1.7;
+}
+.vval a { color: #ede8d8; text-decoration: none; border-bottom: 1px solid rgba(237,232,216,.2); transition: .2s; }
+.vval a:hover { color: #b8922a; border-color: #b8922a; }
+.vval small { display: block; font-size: 12px; color: rgba(237,232,216,.45); margin-top: 4px; font-style: italic; }
+.atags { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 8px; }
+.atag {
+  border: 1px solid rgba(210,175,110,.15); padding: 6px 14px;
+  font-family: 'DM Sans', sans-serif; font-size: 11px; font-weight: 400;
+  letter-spacing: 1px; color: rgba(237,232,216,.7);
+}
+
+.connect-label {
+  font-family: 'DM Sans', sans-serif; font-size: 9px; font-weight: 500;
+  letter-spacing: 5px; text-transform: uppercase; color: #b8922a;
+  margin-bottom: 24px; display: block;
+}
+.clinks { display: flex; flex-direction: column; gap: 0; }
+.clink {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 20px 0; border-bottom: 1px solid rgba(210,175,110,.1);
+  text-decoration: none; color: #ede8d8; transition: .2s;
+}
+.clink:first-child { border-top: 1px solid rgba(210,175,110,.1); }
+.clink-name {
+  font-family: 'Fraunces', serif; font-weight: 700; font-size: 20px;
+  transition: color .2s;
+}
+.clink-arrow { font-size: 20px; opacity: .35; transition: all .2s; }
+.clink:hover .clink-name { color: #b85c2a; }
+.clink:hover .clink-arrow { opacity: 1; transform: translateX(4px); }
+
+/* ── FOOTER ── */
+footer { background-color: #070504; border-top: 1px solid rgba(210,175,110,.1); padding: 60px 48px; }
+.footer-inner { max-width: 1200px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 24px; }
+.footer-wordmark {
+  font-family: 'Bebas Neue', sans-serif; font-size: 36px;
+  letter-spacing: 4px; color: #ede8d8;
+}
+.footer-wordmark span { color: #b85c2a; }
+.footer-tagline {
+  font-family: 'Fraunces', serif; font-style: italic; font-weight: 300;
+  font-size: 14px; color: rgba(237,232,216,.4); margin-top: 2px;
+}
+.footer-links { display: flex; gap: 28px; flex-wrap: wrap; }
+.footer-links a {
+  font-family: 'DM Sans', sans-serif; font-size: 10px; font-weight: 500;
+  letter-spacing: 2px; text-transform: uppercase; color: rgba(237,232,216,.4);
+  text-decoration: none; transition: color .2s;
+}
+.footer-links a:hover { color: #ede8d8; }
+.footer-copy {
+  width: 100%; text-align: center;
+  font-family: 'DM Sans', sans-serif; font-size: 11px;
+  color: rgba(237,232,216,.2); margin-top: 32px; padding-top: 24px;
+  border-top: 1px solid rgba(210,175,110,.07);
+}
+
+a[href^="tel:"] { color: inherit !important; text-decoration: none !important; }
+.reveal { opacity: 0; transform: translateY(30px); transition: opacity .8s, transform .8s; }
+.reveal.vis { opacity: 1; transform: translateY(0); }
+</style>
+</head>
+<body>
+
+<!-- LANG -->
+<div class="lang-bar">
+  <nav style="display:flex;align-items:center;gap:32px;margin-right:auto">
+    <a href="#about" style="font-family:'DM Sans',sans-serif;font-size:10px;font-weight:500;letter-spacing:3px;text-transform:uppercase;color:rgba(237,232,216,.6);text-decoration:none;transition:.2s" onmouseover="this.style.color='#ede8d8'" onmouseout="this.style.color='rgba(237,232,216,.6)'">
+      <span data-en>About</span><span data-es>Nosotros</span>
+    </a>
+    <a href="#menu" style="font-family:'DM Sans',sans-serif;font-size:10px;font-weight:500;letter-spacing:3px;text-transform:uppercase;color:rgba(237,232,216,.6);text-decoration:none;transition:.2s" onmouseover="this.style.color='#ede8d8'" onmouseout="this.style.color='rgba(237,232,216,.6)'">Menu</a>
+    <a href="#events" style="font-family:'DM Sans',sans-serif;font-size:10px;font-weight:500;letter-spacing:3px;text-transform:uppercase;color:rgba(237,232,216,.6);text-decoration:none;transition:.2s" onmouseover="this.style.color='#ede8d8'" onmouseout="this.style.color='rgba(237,232,216,.6)'">
+      <span data-en>Events</span><span data-es>Eventos</span>
+    </a>
+    <a href="#visit" style="font-family:'DM Sans',sans-serif;font-size:10px;font-weight:500;letter-spacing:3px;text-transform:uppercase;color:rgba(237,232,216,.6);text-decoration:none;transition:.2s" onmouseover="this.style.color='#ede8d8'" onmouseout="this.style.color='rgba(237,232,216,.6)'">
+      <span data-en>Visit</span><span data-es>Visítanos</span>
+    </a>
+  </nav>
+  <div class="lang-toggle">
+    <button class="on" onclick="setLang('en')">EN</button>
+    <button onclick="setLang('es')">ES</button>
+  </div>
+</div>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-noise"></div>
+  <div class="hero-glow"></div>
+  <div class="hero-inner">
+    <div class="logo-ring">
+      <img src="data:image/png;base64,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" alt="Yia Caffé">
+    </div>
+    <p class="hero-tagline-pre">Café · Cultura · Comunidad</p>
+    <h1 class="hero-title">YIA <span>CAFFÉ</span></h1>
+    <div class="hero-rule"></div>
+    <p class="hero-sub">Cafecito Oaxaqueño en Boyle Heights</p>
+    <div class="hero-ctas">
+      <a href="https://www.doordash.com/store/yia-caffe-los-angeles-36370761/" target="_blank" class="btn btn-p"><span data-en>Order on DoorDash</span><span data-es>Ordena en DoorDash</span></a>
+      <a href="#visit" class="btn btn-s"><span data-en>Visit Us</span><span data-es>Visítanos</span></a>
+    </div>
+  </div>
+</div>
+
+<!-- TICKER -->
+<div class="ticker-wrap">
+  <div class="ticker">
+    <span class="ticker-item">Oaxacan Mocha</span><span class="ticker-item ticker-dot">·</span>
+    <span class="ticker-item">Horchata Latte</span><span class="ticker-item ticker-dot">·</span>
+    <span class="ticker-item">Spanish Latte #1</span><span class="ticker-item ticker-dot">·</span>
+    <span class="ticker-item">Cold Brew</span><span class="ticker-item ticker-dot">·</span>
+    <span class="ticker-item">Strawberry Matcha</span><span class="ticker-item ticker-dot">·</span>
+    <span class="ticker-item">Tamales de Mole · Weekends</span><span class="ticker-item ticker-dot">·</span>
+    <span class="ticker-item">Mazapan Latte</span><span class="ticker-item ticker-dot">·</span>
+    <span class="ticker-item">Butterfly Lemonade</span><span class="ticker-item ticker-dot">·</span>
+    <span class="ticker-item">Oaxacan Mocha</span><span class="ticker-item ticker-dot">·</span>
+    <span class="ticker-item">Horchata Latte</span><span class="ticker-item ticker-dot">·</span>
+    <span class="ticker-item">Spanish Latte #1</span><span class="ticker-item ticker-dot">·</span>
+    <span class="ticker-item">Cold Brew</span><span class="ticker-item ticker-dot">·</span>
+    <span class="ticker-item">Strawberry Matcha</span><span class="ticker-item ticker-dot">·</span>
+    <span class="ticker-item">Tamales de Mole · Weekends</span><span class="ticker-item ticker-dot">·</span>
+    <span class="ticker-item">Mazapan Latte</span><span class="ticker-item ticker-dot">·</span>
+    <span class="ticker-item">Butterfly Lemonade</span><span class="ticker-item ticker-dot">·</span>
+  </div>
+</div>
+
+
+<!-- ABOUT -->
+<div class="about-section" id="about">
+  <div class="about-inner">
+    <div class="about-grid reveal">
+      <div>
+        <h2 class="about-heading"><span data-en>More than <em>coffee</em></span><span data-es>Más que un <em>café</em></span></h2>
+        <p class="about-body" data-en>Yia Caffé was born from a deep love of coffee and community. Owned by Leo Miguel and Jorge Castillo — with over 15 years in the coffee industry — this Oaxacan-rooted café opened in Boyle Heights in 2025 and hasn't looked back since.</p>
+        <p class="about-body" data-en style="margin-top:20px">The space is everything at once: a walk-up window wrapped in a hand-painted mural, a wisteria-covered patio strung with lights, and a gathering place where the neighborhood actually gathers. Health workers, journalists, organizers, and neighbors — everyone comes through. Dogs too.</p>
+        <p class="about-body" data-en style="margin-top:20px">Every drink carries a piece of where Leo and Jorge are from. The Oaxacan Mocha — espresso, chocolate, and spices — is the one people keep coming back for. Come find out why.</p>
+        <p class="about-body" data-es>Yia Caffé nació del amor al café y a la comunidad. Leo Miguel y Jorge Castillo — con 15 años de experiencia — abrieron este rincón oaxaqueño en Boyle Heights en 2025. Desde entonces, no han parado.</p>
+        <p class="about-body" data-es style="margin-top:20px">El lugar lo es todo: una ventanilla con mural pintado a mano, un patio bajo la glicina lleno de luces, y donde la comunidad de verdad se une — y sí, también las mascotas son bienvenidas.</p>
+        <p class="about-body" data-es style="margin-top:20px">Cada bebida trae un pedacito de Oaxaca. El Mocha Oaxaqueño — espresso, chocolate y especias — es el que la gente no puede dejar de pedir. Ven y averigua por qué.</p>
+        <p class="about-owners">Leo Miguel &amp; Jorge Castillo — <span data-en>Owners</span><span data-es>Los Dueños</span></p>
+      </div>
+      <div class="about-visual">
+        <div class="about-num-block">
+          <span class="about-num">15+</span>
+          <span class="about-num-label"><span data-en>years of craft coffee</span><span data-es>años en el negocio</span></span>
+          <span class="about-tag">Est. 2025</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- MENU -->
+<div class="menu-section" id="menu">
+  <div class="menu-inner">
+    <div class="menu-header reveal">
+      <h2 class="menu-heading">THE <span>MENU</span></h2>
+      <a href="https://www.doordash.com/store/yia-caffe-los-angeles-36370761/" target="_blank" class="menu-dd-link"><span data-en>Order on DoorDash →</span><span data-es>Ordena en DoorDash →</span></a>
+    </div>
+    <div class="reveal">
+      <div class="mgrid">
+        <!-- SMOOTHIES -->
+        <div class="mcard"><div class="mcat"><span data-en>Smoothies</span><span data-es>Malteadas</span></div><div class="mname">Cacao de Mi Corazon</div><div class="mdesc" data-en>Banana, Cacao, Almond Milk, Almond Butter</div><div class="mdesc" data-es>Plátano, cacao, leche de almendra, mantequilla de almendra</div><div class="mprice">$6.50 / $7</div></div>
+        <div class="mcard"><div class="mcat"><span data-en>Smoothies</span><span data-es>Malteadas</span></div><div class="mname">Istmo Tropical</div><div class="mdesc" data-en>Mango, Pineapple, Coconut Milk, Agave</div><div class="mdesc" data-es>Mango, piña, leche de coco, agave</div><div class="mprice">$6.50 / $7</div></div>
+        <!-- ESPRESSO -->
+        <div class="mcard"><div class="mcat"><span data-en>Espresso</span><span data-es>Espresso</span></div><div class="mname">Cold Brew</div><div class="mdesc" data-en>Chilled coffee. Regular or large.</div><div class="mdesc" data-es>Café frío bien cargado. Chico o grande.</div><div class="mprice">$6 / $6.50</div></div>
+        <div class="mcard"><div class="mcat"><span data-en>Espresso</span><span data-es>Espresso</span></div><div class="mname">Latte</div><div class="mdesc" data-en>Creamy espresso with steamed milk. Regular or large.</div><div class="mdesc" data-es>Espresso cremoso con leche. Chico o grande.</div><div class="mprice">$4.50 / $5</div></div>
+        <div class="mcard"><div class="mcat"><span data-en>Espresso</span><span data-es>Espresso</span></div><div class="mname">Cappuccino</div><div class="mdesc" data-en>Classic cappuccino.</div><div class="mdesc" data-es>Capuchino de a de veras.</div><div class="mprice">$4.00</div></div>
+        <div class="mcard"><div class="mcat"><span data-en>Espresso</span><span data-es>Espresso</span></div><div class="mname">Cortado</div><div class="mdesc" data-en>Espresso and steamed milk in equal measure.</div><div class="mdesc" data-es>Espresso con tantito de leche, ni más ni menos.</div><div class="mprice">$4.00</div></div>
+        <div class="mcard"><div class="mcat"><span data-en>Espresso</span><span data-es>Espresso</span></div><div class="mname">Americano</div><div class="mdesc" data-en>Black espresso with hot water. Regular or large.</div><div class="mdesc" data-es>Café negro con agua caliente. Chico o grande.</div><div class="mprice">$3.50</div></div>
+        <div class="mcard"><div class="mcat"><span data-en>Espresso</span><span data-es>Espresso</span></div><div class="mname">Espresso</div><div class="mdesc" data-en>Rich, flavorful cup brewed to perfection.</div><div class="mdesc" data-es>Un shot bien jalado.</div><div class="mprice">$3.50</div></div>
+        <!-- FLAVORED LATTES -->
+        <div class="mcard"><div class="mcat"><span data-en>Flavored Lattes</span><span data-es>Lattes pa' todos los gustos</span></div><div class="mname">Roasted Hazelnut</div><div class="mdesc" data-en>Rich Italian coffee with roasted hazelnut. Regular or large.</div><div class="mdesc" data-es>Café con avellana tostada. Bien rico.</div><div class="mprice">$5.00</div></div>
+        <div class="mcard"><div class="mcat"><span data-en>Flavored Lattes</span><span data-es>Lattes pa' todos los gustos</span></div><div class="mname">Salted Caramel</div><div class="mdesc" data-en>Salted caramel latte. Regular or large.</div><div class="mdesc" data-es>Latte de caramelo con sal. Pa' los que les gusta lo dulce y salado.</div><div class="mprice">$5.00</div></div>
+        <div class="mcard"><div class="mcat"><span data-en>Flavored Lattes</span><span data-es>Lattes pa' todos los gustos</span></div><div class="mname">Vanilla Latte</div><div class="mdesc" data-en>Vanilla-infused espresso with steamed milk.</div><div class="mdesc" data-es>Espresso con vainilla y leche. Clásico.</div><div class="mprice">$5.00</div></div>
+        <div class="mcard"><div class="mcat"><span data-en>Flavored Lattes</span><span data-es>Lattes pa' todos los gustos</span></div><div class="mname">Sugar Free Vanilla</div><div class="mdesc" data-en>Sugar-free vanilla latte. Regular or large.</div><div class="mdesc" data-es>Sin azúcar pero igual de sabroso.</div><div class="mprice">$5.00</div></div>
+        <!-- SPECIALTY -->
+        <div class="mcard" style="border-left: 2px solid #b85c2a"><div class="mcat"><span data-en>Specialty Espresso</span><span data-es>Especialidades</span></div><div class="mname">Spanish Latte</div><div class="mdesc" data-en>Rich and creamy latte with a hint of sweetness. Regular or large.</div><div class="mdesc" data-es>Latte cremoso con un toquecito de dulce. El más pedido.</div><div class="mprice">$6.00 <span style="font-family:'DM Sans',sans-serif;font-size:10px;color:#8fba78;font-weight:500;letter-spacing:2px">#1</span></div></div>
+        <div class="mcard"><div class="mcat"><span data-en>Specialty Espresso</span><span data-es>Especialidades</span></div><div class="mname">Oaxacan Mocha</div><div class="mdesc" data-en>Espresso, chocolate, and spices. Regular or large.</div><div class="mdesc" data-es>Espresso, chocolate y especias.</div><div class="mprice">$6 / $6.50</div></div>
+        <div class="mcard"><div class="mcat"><span data-en>Specialty Espresso</span><span data-es>Especialidades</span></div><div class="mname">Horchata Latte</div><div class="mdesc" data-en>Creamy, spiced rice milk. Regular or large.</div><div class="mdesc" data-es>Como la horchata de tu abuela pero en latte. Chico o grande.</div><div class="mprice">$6 / $6.50</div></div>
+        <div class="mcard"><div class="mcat"><span data-en>Specialty Espresso</span><span data-es>Especialidades</span></div><div class="mname">Mazapan Latte</div><div class="mdesc" data-en>Almond-flavored mazapan espresso. Regular or large.</div><div class="mdesc" data-es>Espresso con mazapán de almendra.</div><div class="mprice">$6 / $6.50</div></div>
+        <!-- REFRESHERS -->
+        <div class="mcard"><div class="mcat">Refreshers</div><div class="mname">Arnold Palmer</div><div class="mdesc" data-en>Half lemonade, half iced tea. Regular or large.</div><div class="mdesc" data-es>Mitad limonada, mitad té helado. Bien refrescante.</div><div class="mprice">$4 / $4.50</div></div>
+        <div class="mcard"><div class="mcat">Refreshers</div><div class="mname">Butterfly Lemonade</div><div class="mdesc" data-en>Lemonade with butterfly pea flower. Regular or large.</div><div class="mdesc" data-es>Limonada con flor de chícharo mariposa.</div><div class="mprice">$4 / $4.50</div></div>
+        <div class="mcard"><div class="mcat">Refreshers</div><div class="mname">Rose Lemonade</div><div class="mdesc" data-en>Rose lemonade with hints of florals. Regular or large.</div><div class="mdesc" data-es>Limonada con rosas. Muy de Boyle Heights.</div><div class="mprice">$4 / $4.50</div></div>
+        <div class="mcard"><div class="mcat">Refreshers</div><div class="mname">Lemonade</div><div class="mdesc" data-en>Refreshing and zesty. Regular or large.</div><div class="mdesc" data-es>Limonada de la buena.</div><div class="mprice">$4 / $4.50</div></div>
+        <!-- SPECIALTY TEA LATTES -->
+        <div class="mcard"><div class="mcat"><span data-en>Specialty Tea Lattes</span><span data-es>Lattes de Té</span></div><div class="mname">Strawberry Matcha</div><div class="mdesc" data-en>Strawberry matcha latte. Regular or large.</div><div class="mdesc" data-es>Matcha con fresa. Bien bonito y bien rico.</div><div class="mprice">$8 / $8.50 · Iced only</div></div>
+        <div class="mcard"><div class="mcat"><span data-en>Specialty Tea Lattes</span><span data-es>Lattes de Té</span></div><div class="mname">Matcha Horchata</div><div class="mdesc" data-en>Matcha and horchata spices. Regular or large.</div><div class="mdesc" data-es>Matcha mezclado con horchata. No lo vas a encontrar en otro lado.</div><div class="mprice">$6 / $6.50</div></div>
+        <div class="mcard"><div class="mcat"><span data-en>Specialty Tea Lattes</span><span data-es>Lattes de Té</span></div><div class="mname">Matcha Rose Butterfly</div><div class="mdesc" data-en>Matcha, rose, and butterfly pea tea. Regular or large.</div><div class="mdesc" data-es>Matcha, rosa y té mariposa. Queda muy pretty.</div><div class="mprice">$6 / $6.50</div></div>
+        <!-- TEA LATTES -->
+        <div class="mcard"><div class="mcat"><span data-en>Tea Lattes</span><span data-es>Lattes de Té</span></div><div class="mname">Thai Tea</div><div class="mdesc" data-en>Sweet and creamy tea with rich spices. Regular or large.</div><div class="mdesc" data-es>Té thai bien dulcito y cremoso.</div><div class="mprice">$6.00</div></div>
+        <div class="mcard"><div class="mcat"><span data-en>Tea Lattes</span><span data-es>Lattes de Té</span></div><div class="mname">Homemade Chai Latte</div><div class="mdesc" data-en>Homemade chai. Regular or large.</div><div class="mdesc" data-es>Chai casero. Regular o grande.</div><div class="mprice">$5.50 / $6</div></div>
+        <div class="mcard"><div class="mcat"><span data-en>Tea Lattes</span><span data-es>Lattes de Té</span></div><div class="mname">Matcha Latte</div><div class="mdesc" data-en>Classic matcha latte. Regular or large.</div><div class="mdesc" data-es>Latte de matcha clásico. Regular o grande.</div><div class="mprice">$5.50 / $6</div></div>
+        <!-- HOT/ICED TEAS -->
+        <div class="mcard"><div class="mcat"><span data-en>Hot / Iced Teas</span><span data-es>Tés</span></div><div class="mname">Jamaica</div><div class="mdesc" data-en>Hibiscus tea. Regular or large.</div><div class="mdesc" data-es>Jamaica bien fría o calientita.</div><div class="mprice">$3.00</div></div>
+        <div class="mcard"><div class="mcat"><span data-en>Hot / Iced Teas</span><span data-es>Tés</span></div><div class="mname">Manzanilla</div><div class="mdesc" data-en>Chamomile tea. Regular or large.</div><div class="mdesc" data-es>Manzanilla pa' calmar el cuerpo.</div><div class="mprice">$3.00</div></div>
+        <div class="mcard"><div class="mcat"><span data-en>Hot / Iced Teas</span><span data-es>Tés</span></div><div class="mname">Té de Menta</div><div class="mdesc" data-en>Refreshing mint-infused tea. Regular or large.</div><div class="mdesc" data-es>Menta fresquita.</div><div class="mprice">$3.00</div></div>
+        <div class="mcard"><div class="mcat"><span data-en>Hot / Iced Teas</span><span data-es>Tés</span></div><div class="mname">Té Negro</div><div class="mdesc" data-en>Traditional tea blend. Regular or large.</div><div class="mdesc" data-es>Té negro bien cargado.</div><div class="mprice">$3.00</div></div>
+        <!-- PASTRY -->
+        <div class="mcard"><div class="mcat"><span data-en>Pastry</span><span data-es>Panadería</span></div><div class="mname">Guava</div><div class="mdesc" data-en>Guava pastry.</div><div class="mdesc" data-es>Pan de guayaba de la buena.</div><div class="mprice">$3.25</div></div>
+        <div class="mcard"><div class="mcat"><span data-en>Pastry</span><span data-es>Panadería</span></div><div class="mname">Piña Empanada</div><div class="mdesc" data-en>Pineapple empanada.</div><div class="mdesc" data-es>Empanada de piña, calientita.</div><div class="mprice">$4.25</div></div>
+        <div class="mcard"><div class="mcat"><span data-en>Pastry</span><span data-es>Panadería</span></div><div class="mname">Butter Croissant</div><div class="mdesc" data-en>Flaky, light and airy with rich butter flavor.</div><div class="mdesc" data-es>Croissant de mantequilla, bien hojaldrado.</div><div class="mprice">$5.25</div></div>
+        <div class="mcard"><div class="mcat"><span data-en>Pastry</span><span data-es>Panadería</span></div><div class="mname">Churro Croissant</div><div class="mdesc" data-en>Crispy exterior dusted with sweet cinnamon sugar.</div><div class="mdesc" data-es>Croissant con canela y azúcar. Como un churro pero fancy.</div><div class="mprice">$5.75</div></div>
+      </div>
+          <div style="background:#0f0c09;border:1px solid rgba(201,169,122,.12);border-top:none;display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:0">
+      <div style="padding:20px 24px;border-right:1px solid rgba(201,169,122,.08)">
+        <div class="mcat" style="margin-bottom:10px">Sabores +$0.50</div>
+        <div class="mdesc" style="font-size:12px;line-height:1.9">Vainilla · Vainilla sin azúcar<br>Avellana tostada · Caramelo salado</div>
+      </div>
+      <div style="padding:20px 24px;border-right:1px solid rgba(201,169,122,.08)">
+        <div class="mcat" style="margin-bottom:10px">Espumas +$1</div>
+        <div class="mdesc" style="font-size:12px;line-height:1.9">Espuma de cacahuate<br>Espuma dulce</div>
+      </div>
+      <div style="padding:20px 24px">
+        <div class="mcat" style="margin-bottom:10px">Leches +$1</div>
+        <div class="mdesc" style="font-size:12px;line-height:1.9">Almendra · Coco · Avena</div>
+      </div>
+    </div>
+    <div class="mnote" data-en>Full menu available on <a href="https://www.doordash.com/store/yia-caffe-los-angeles-36370761/" target="_blank">DoorDash</a> for delivery &amp; pickup. Orders close at 4:40 PM.</div>
+      <div class="mnote" data-es>Menú completo en <a href="https://www.doordash.com/store/yia-caffe-los-angeles-36370761/" target="_blank">DoorDash</a> para pedir a domicilio o pasar a recoger. Los pedidos cierran a las 4:40 PM.</div>
+    </div>
+  </div>
+</div>
+
+<!-- FLAVOR QUIZ -->
+<div class="quiz-section">
+  <div class="quiz-inner">
+    <div class="reveal">
+      <h2 class="quiz-heading">FIND YOUR <span>DRINK</span></h2>
+      <p class="quiz-sub"><span data-en>Pick your flavors. We'll do the rest.</span><span data-es>Dinos qué te gusta y nosotros te atinamos.</span></p>
+    </div>
+    <div class="fgrid reveal">
+      <button class="fbtn" data-f="smoky" onclick="toggleF(this)"><span class="flabel"><span data-en>Smoky</span><span data-es>Ahumado</span></span><span class="fsub" data-en>deep · dark</span><span class="fsub" data-es>profundo · oscuro</span></button>
+      <button class="fbtn" data-f="sweet" onclick="toggleF(this)"><span class="flabel"><span data-en>Sweet</span><span data-es>Dulce</span></span><span class="fsub" data-en>smooth · soft</span><span class="fsub" data-es>suave · delicado</span></button>
+      <button class="fbtn" data-f="earthy" onclick="toggleF(this)"><span class="flabel"><span data-en>Earthy</span><span data-es>Terroso</span></span><span class="fsub" data-en>natural · pure</span><span class="fsub" data-es>natural · puro</span></button>
+      <button class="fbtn" data-f="spiced" onclick="toggleF(this)"><span class="flabel"><span data-en>Spiced</span><span data-es>Especiado</span></span><span class="fsub" data-en>warm · aromatic</span><span class="fsub" data-es>cálido · aromático</span></button>
+      <button class="fbtn" data-f="choc" onclick="toggleF(this)"><span class="flabel"><span data-en>Chocolatey</span><span data-es>Chocolate</span></span><span class="fsub" data-en>rich · indulgent</span><span class="fsub" data-es>rico · intenso</span></button>
+      <button class="fbtn" data-f="bold" onclick="toggleF(this)"><span class="flabel"><span data-en>Bold</span><span data-es>Intenso</span></span><span class="fsub" data-en>strong · direct</span><span class="fsub" data-es>fuerte · directo</span></button>
+    </div>
+    <div class="quiz-go reveal">
+      <button class="btn btn-p" onclick="getRec()"><span data-en>Get My Drink</span><span data-es>¡A ver qué sale!</span></button>
+    </div>
+    <div class="qresult" id="qr">
+      <div class="rlabel"><span data-en>Your Perfect Drink</span><span data-es>Te cae esta</span></div>
+      <div class="rdrink" id="rd"></div>
+      <div class="rdesc" id="rde"></div>
+      <div class="rbtns">
+        <a href="https://www.doordash.com/store/yia-caffe-los-angeles-36370761/" class="btn btn-p" target="_blank"><span data-en>Order It</span><span data-es>Pídelo ya</span></a>
+        <button class="btn btn-s" onclick="resetQ()"><span data-en>Try Again</span><span data-es>Otra vez</span></button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- COMMUNITY -->
+<div class="comm-section">
+  <div class="comm-inner">
+    <div class="comm-top reveal">
+      <h2 class="comm-heading">CORAZÓN DE LA<br><span>COMUNIDAD</span></h2>
+      <p class="comm-body" data-en>Yia Caffé is a gathering place for Boyle Heights — where community organizers, health workers, journalists, and neighbors come together. <em>Todos son bienvenidos.</em></p>
+      <p class="comm-body" data-es>Yia Caffé es el punto de encuentro de la comunidad — donde organizadores, trabajadores de salud, periodistas y vecinos se unen. Aquí no hay de esas. <em>Todos son bienvenidos.</em></p>
+    </div>
+    <div class="comm-grid reveal">
+      <div class="ccard"><div class="cmark"></div><div class="cname">Raíces con Voz</div><div class="cdesc" data-en>Latinos in Public Health — community health fairs and Hispanic Heritage events.</div><div class="cdesc" data-es>Latinos en Salud Pública — ferias de salud y eventos pa' la comunidad.</div></div>
+      <div class="ccard"><div class="cmark"></div><div class="cname">Vida Mobile Clinic</div><div class="cdesc" data-en>Free health screenings, blood pressure checks, and medication education.</div><div class="cdesc" data-es>Chequeos médicos gratis, control de presión y pláticas sobre medicamentos.</div></div>
+      <div class="ccard"><div class="cmark"></div><div class="cname">Boyle Heights Beat</div><div class="cdesc" data-en>Local journalism — Cafecito with the Beat connects reporters with the neighborhood.</div><div class="cdesc" data-es>Periodismo de la comunidad — reporteros tomando café y hablando con la gente.</div></div>
+      <div class="ccard"><div class="cmark"></div><div class="cname"><span data-en>Your Organization</span><span data-es>Tu Organización</span></div><div class="cdesc" data-en>Open to meetings, cultural events, pop-ups, crafting circles, and more.</div><div class="cdesc" data-es>¿Quieres usar el espacio? Está abierto pa' reuniones, eventos, mercaditos, talleres y lo que se les ocurra.</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- EVENTS -->
+<div class="ev-section" id="events">
+  <div class="ev-inner">
+    <div class="reveal">
+      <h2 class="ev-heading">HOST AN <span>EVENT</span></h2>
+      <p class="ev-body" data-en>Yia Caffé is available for community gatherings, org meetings, cultural events, pop-ups and more. Street parking available. Alcohol-free space. Note: no restrooms on premises.</p>
+      <p class="ev-body" data-es>El espacio está disponible para reuniones, eventos culturales, mercaditos y lo que se les antoje. Hay estacionamiento en la calle. No se permite alcohol en las instalaciones. No hay baños públicos.</p>
+    </div>
+    <form class="fform reveal" onsubmit="submitF(event)">
+      <div><label><span data-en>First Name</span><span data-es>Nombre</span></label><input type="text" required></div>
+      <div><label><span data-en>Last Name</span><span data-es>Apellido</span></label><input type="text" required></div>
+      <div><label><span data-en>Email</span><span data-es>Correo</span></label><input type="email" required></div>
+      <div><label><span data-en>Phone</span><span data-es>Teléfono</span></label><input type="tel"></div>
+      <div><label><span data-en>Organization</span><span data-es>Organización (si aplica)</span></label><input type="text"></div>
+      <div><label><span data-en>Expected Attendance</span><span data-es>¿Cuántos van a venir?</span></label>
+        <select><option>1–10</option><option>11–25</option><option>26–50</option><option>50+</option></select></div>
+      <div><label><span data-en>Event Type</span><span data-es>¿Qué van a hacer?</span></label>
+        <select>
+          <option>Community Meeting / Reunión</option>
+          <option>Health Fair / Feria de Salud</option>
+          <option>Cultural Event / Evento Cultural</option>
+          <option>Pop-Up / Mercadito</option>
+          <option>Workshop / Taller</option>
+          <option>Other / Otro</option>
+        </select></div>
+      <div><label><span data-en>Preferred Date</span><span data-es>¿Qué día?</span></label><input type="date"></div>
+      <div class="full"><label><span data-en>About Your Event</span><span data-es>Cuéntanos más</span></label><textarea></textarea></div>
+      <div class="full">
+        <button type="submit" class="btn btn-p"><span data-en>Submit</span><span data-es>Manda tu info</span></button>
+        <p class="fnote" data-en>We'll be in touch within 2–3 business days.</p>
+        <p class="fnote" data-es>Te marcamos en 2–3 días.</p>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- VISIT -->
+<div class="visit-section" id="visit">
+  <div class="visit-inner">
+    <div class="visit-grid reveal">
+      <div>
+        <h2 class="visit-heading">COME <span>FIND US</span></h2>
+        <div class="vdet"><div class="vlabel"><span data-en>Address</span><span data-es>Dirección</span></div><div class="vval"><a href="https://maps.google.com/?q=3557+E+3rd+St+Boyle+Heights+CA+90063" target="_blank">3557 E 3rd St<br>Boyle Heights, CA 90063</a></div></div>
+        <div class="vdet"><div class="vlabel"><span data-en>Hours</span><span data-es>Horario</span></div><div class="vval"><span data-en>Every Day · 7:00 AM – 5:00 PM</span><span data-es>Todos los días · 7:00 AM – 5:00 PM</span><small><span data-en>DoorDash orders close at 4:40 PM</span><span data-es>Los pedidos de DoorDash cierran a las 4:40 PM</span></small></div></div>
+        
+        <div class="vdet"><div class="vlabel"><span data-en>Parking</span><span data-es>Estacionamiento</span></div><div class="vval" data-en>Street parking on E 3rd St. Allow extra time. Next to the Mariachi Plaza Metro stop.</div><div class="vval" data-es>Estacionamiento en la calle en E 3rd St. Llega con tiempo. Estás al lado del Metro Mariachi Plaza.</div></div>
+        <div class="vdet"><div class="vlabel"><span data-en>Amenities</span><span data-es>Servicios</span></div>
+          <div class="atags">
+            <span class="atag"><span data-en>Pets Welcome</span><span data-es>Mascotas</span></span>
+            <span class="atag">Free Wi-Fi</span>
+            <span class="atag"><span data-en>Alcohol-Free</span><span data-es>No se permite alcohol</span></span>
+            <span class="atag"><span data-en>Family Friendly</span><span data-es>Familia bienvenida</span></span>
+          <span class="atag"><span data-en>Wisteria Patio</span><span data-es>Patio bajo la glicina</span></span>
+          <span class="atag"><span data-en>Next to Metro</span><span data-es>Al lado del Metro</span></span>
+          </div>
+        </div>
+      </div>
+      <div>
+        <span class="connect-label"><span data-en>Connect</span><span data-es>Conéctate</span></span>
+        <div class="clinks">
+          <a class="clink" href="https://instagram.com/yiacaffe" target="_blank"><span class="clink-name">Instagram</span><span class="clink-arrow">→</span></a>
+          <a class="clink" href="https://www.doordash.com/store/yia-caffe-los-angeles-36370761/" target="_blank"><span class="clink-name">DoorDash</span><span class="clink-arrow">→</span></a>
+          <a class="clink" href="https://share.google/XH76jUytHHf6654iZ" target="_blank"><span class="clink-name">📍 <span data-en>Google Review</span><span data-es>Déjanos una reseña</span></span><span class="clink-arrow">→</span></a>
+          <a class="clink" href="tel:+13236852049"><span class="clink-name">(323) 685-2049</span><span class="clink-arrow">→</span></a>
+          <a class="clink" href="#events"><span class="clink-name"><span data-en>Host an Event</span><span data-es>Reserva el espacio</span></span><span class="clink-arrow">→</span></a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <div>
+      <div class="footer-wordmark">YIA <span>CAFFÉ</span></div>
+      <div class="footer-tagline">Café · Cultura · Comunidad</div>
+    </div>
+    <div class="footer-links">
+      <a href="#">Menu</a>
+      <a href="https://instagram.com/yiacaffe" target="_blank">Instagram</a>
+      <a href="https://www.doordash.com/store/yia-caffe-los-angeles-36370761/" target="_blank">DoorDash</a>
+      <a href="https://share.google/XH76jUytHHf6654iZ" target="_blank">Google</a>
+      <a href="#events"><span data-en>Events</span><span data-es>Eventos</span></a>
+    </div>
+  </div>
+  <p class="footer-copy">© 2025 Yia Caffé · 3557 E 3rd St, Boyle Heights · (323) 685-2049 · Open daily 7AM–5PM</p>
+</footer>
+
+<script>
+
+// Smooth scroll with fixed header offset
+document.querySelectorAll('a[href^="#"]').forEach(a => {
+  a.addEventListener('click', e => {
+    const target = document.querySelector(a.getAttribute('href'));
+    if (target) {
+      e.preventDefault();
+      const offset = 52; // height of fixed nav
+      const top = target.getBoundingClientRect().top + window.scrollY - offset;
+      window.scrollTo({ top, behavior: 'smooth' });
+    }
+  });
+});
+
+function setLang(l){
+  document.body.classList.toggle('es',l==='es');
+  document.querySelectorAll('.lang-toggle button').forEach((b,i)=>b.classList.toggle('on',(i===0&&l==='en')||(i===1&&l==='es')));
+}
+const obs=new IntersectionObserver(e=>e.forEach(x=>{if(x.isIntersecting)x.target.classList.add('vis')}),{threshold:.08});
+document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
+const REC={
+  choc:{en:{d:'Oaxacan Mocha',t:"Espresso, Oaxacan chocolate, and spices. The owner's personal favorite."},es:{d:'Mocha Oaxaqueño',t:'Espresso, chocolate oaxaqueño y especias. El favorito del dueño.'}},
+  spiced:{en:{d:'Horchata Latte',t:'Creamy, spiced rice milk meets bold espresso. Warm and deeply traditional.'},es:{d:'Latte de Horchata',t:'Leche de arroz cremosa y especiada con espresso. Cálido y tradicional.'}},
+  earthy:{en:{d:'Café de Grano',t:'Single-origin, freshly ground. Pure and natural — the soul of Oaxacan coffee.'},es:{d:'Café de Grano',t:'Origen único, recién molido. Puro y natural.'}},
+  bold:{en:{d:'Cortado',t:'Espresso and steamed milk in equal measure. Bold, smooth, unapologetic.'},es:{d:'Cortado',t:'Espresso y leche al vapor a partes iguales. Intenso y sin disculpas.'}},
+  sweet:{en:{d:'Mazapan Latte',t:'Creamy espresso with almond-flavored mazapan. Sweet, nutty, unforgettable.'},es:{d:'Latte de Mazapán',t:'Espresso cremoso con mazapán de almendra. Dulce e inolvidable.'}},
+  smoky:{en:{d:'Cold Brew',t:'Dark, chilled, and complex — like the mezcal country that inspires this café.'},es:{d:'Cold Brew',t:'Oscuro, frío y complejo — como el país del mezcal que inspira este café.'}}
+};
+let sel=[];
+function toggleF(b){const f=b.dataset.f;b.classList.contains('on')?(b.classList.remove('on'),sel=sel.filter(s=>s!==f)):(b.classList.add('on'),sel.push(f));}
+function getRec(){
+  const es=document.body.classList.contains('es');
+  if(!sel.length){const k=Object.keys(REC);sel=[k[Math.floor(Math.random()*k.length)]];}
+  const ord=['choc','spiced','smoky','earthy','bold','sweet'];
+  const best=ord.find(p=>sel.includes(p))||sel[0];
+  const r=REC[best];
+  document.getElementById('rd').textContent=es?r.es.d:r.en.d;
+  document.getElementById('rde').textContent=es?r.es.t:r.en.t;
+  const qr=document.getElementById('qr');qr.classList.add('show');
+  qr.scrollIntoView({behavior:'smooth',block:'nearest'});
+}
+function resetQ(){sel=[];document.querySelectorAll('.fbtn').forEach(b=>b.classList.remove('on'));document.getElementById('qr').classList.remove('show');}
+function submitF(e){e.preventDefault();const es=document.body.classList.contains('es');alert(es?'¡Órale! Te hablamos pronto.':'Thank you! We\'ll be in touch soon.');e.target.reset();}
+</script>
+</body>
+</html>
